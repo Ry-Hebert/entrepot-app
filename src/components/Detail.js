@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   makeStyles,
   Container,
@@ -11,28 +11,11 @@ import {
   TableCell,
   TableRow,
   TableHead,
-  IconButton,
 } from "@material-ui/core";
-import DashboardIcon from "@material-ui/icons//Dashboard";
-import PeopleIcon from "@material-ui/icons/People";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import RefreshIcon from "@material-ui/icons/Refresh";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import ShareIcon from "@material-ui/icons/Share";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
-import ShopIcon from "@material-ui/icons/Shop";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import FormatAlignLeftIcon from "@material-ui/icons/FormatAlignLeft";
 import ListIcon from '@material-ui/icons/List';
-import AcUnitIcon from "@material-ui/icons/AcUnit";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import ShowChartIcon from '@material-ui/icons/ShowChart';
-import DetailsIcon from "@material-ui/icons/Details";
-import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -46,7 +29,7 @@ import Alert from '@material-ui/lab/Alert';
 import OfferForm from './OfferForm';
 import { useNavigate } from "react-router-dom";
 import extjs from "../ic/extjs.js";
-import { EntrepotNFTImage, EntrepotNFTLink, EntrepotNFTMintNumber, EntrepotDisplayNFT, EntrepotGetICPUSD, EntrepotGetOffers, EntrepotCollectionStats } from '../utils';
+import { EntrepotNFTImage, EntrepotNFTLink, EntrepotNFTMintNumber, EntrepotGetICPUSD, EntrepotCollectionStats } from '../utils';
 import {
   useParams
 } from "react-router-dom";
@@ -76,18 +59,7 @@ const shorten = a => {
   return a.substring(0, 12) + "...";
 };
 var collections = _c;
-const emptyListing = {
-  pricing: "",
-  img: "",
-};
 
-const _getRandomBytes = () => {
-  var bs = [];
-  for (var i = 0; i < 32; i++) {
-    bs.push(Math.floor(Math.random() * 256));
-  }
-  return bs;
-};
 const Detail = (props) => {
   let { tokenid } = useParams();
   let { index, canister} = extjs.decodeTokenId(tokenid);
@@ -114,7 +86,7 @@ const Detail = (props) => {
       setOwner(r.ok);
     });
     await api.token(canister).listings().then(r => {
-      var f = r.find(a => a[0] == index);
+      var f = r.find(a => a[0] === index);
       if (f && f[1]) setListing(f[1]);
       else setListing({});
     });
@@ -133,7 +105,7 @@ const Detail = (props) => {
   }
   const _afterList = async () => {
     await api.token(canister).listings().then(r => {
-      var f = r.find(a => a[0] == index);
+      var f = r.find(a => a[0] === index);
       if (f[1]) setListing(f[1]);
       else setListing({});
     });
@@ -144,7 +116,7 @@ const Detail = (props) => {
       setOwner(r.ok);
     });
     await api.token(canister).listings().then(r => {
-      var f = r.find(a => a[0] == index);
+      var f = r.find(a => a[0] === index);
       if (f[1]) setListing(f[1]);
       else setListing({});
     });
@@ -227,7 +199,6 @@ const Detail = (props) => {
             }}
           />
         );
-        break;
       case "dv6u3-vqaaa-aaaah-qcdlq-cai":
       case "eb7r3-myaaa-aaaah-qcdya-cai":
       case "pk6rk-6aaaa-aaaae-qaazq-cai":
@@ -240,6 +211,7 @@ const Detail = (props) => {
       case "ag2h7-riaaa-aaaah-qce6q-cai":
         return (
           <iframe
+            title='NFT Image'
             frameBorder="0"
             src={EntrepotNFTImage(canister, index, tokenid, true)}
             alt=""
@@ -257,7 +229,6 @@ const Detail = (props) => {
             }}
           />
         );
-        break;
       case "7gvfz-3iaaa-aaaah-qcsbq-cai":
       case "bxdf4-baaaa-aaaah-qaruq-cai":
       case "dylar-wyaaa-aaaah-qcexq-cai":
@@ -281,7 +252,6 @@ const Detail = (props) => {
             }}
           />
         );
-        break;
     }
   };
   
@@ -347,7 +317,7 @@ const Detail = (props) => {
           <Grid item xs={12} sm={12} md={7}>
             <div className={classes.personal}>
               <Typography variant="h6" style={{ color: "#648DE2" }}>
-                <a onClick={() => navigate("/marketplace/"+collection.route)} style={{color:"#648DE2", textDecoration:"none", cursor:"pointer"}}>{collection.name}</a>
+                <a href={`/marketplace/${collection.route}`} onClick={() => navigate("/marketplace/"+collection.route)} style={{color:"#648DE2", textDecoration:"none", cursor:"pointer"}}>{collection.name}</a>
               </Typography>
               <div style={{zIndex: 100}} className="sharethis-inline-share-buttons"></div>
               
@@ -474,7 +444,7 @@ const Detail = (props) => {
                   }
                 </>
               }
-              { owner && props.account && props.account.address == owner ?
+              { owner && props.account && props.account.address === owner ?
                 <>
                   <div className={classes.button}>
                     {listing !== false && listing && listing.hasOwnProperty("locked") ?
@@ -532,10 +502,10 @@ const Detail = (props) => {
                   </div> : "" }
                 </>
               }
-              {owner && props.account.address == owner?
+              {owner && props.account.address === owner?
               <div style={{marginTop:20}}><strong>Owned by you</strong></div> : "" }
-              {owner && props.account.address != owner?
-              <div style={{marginTop:20}}><strong>Owner:</strong> <a href={"https://dashboard.internetcomputer.org/account/"+owner} target="_blank">{shorten(owner)}</a></div> : "" }
+              {owner && props.account.address !== owner?
+              <div style={{marginTop:20}}><strong>Owner:</strong> <a href={"https://dashboard.internetcomputer.org/account/"+owner} target="_blank" rel='noopener noreferrer'>{shorten(owner)}</a></div> : "" }
             </div>
             <Accordion defaultExpanded>
               <AccordionSummary
@@ -598,7 +568,7 @@ const Detail = (props) => {
                                       date={Number(offer.time / 1000000000n)}
                                     /></TableCell>
                                     <TableCell align="center">
-                                      {props.identity && props.identity.getPrincipal().toText() == offer.buyer.toText() ? <Button onClick={cancelOffer} size={"small"} style={{color:"white", backgroundColor:"#c32626"}} variant={"contained"}>Cancel</Button> : <a href={"https://ic.rocks/principal/"+offer.buyer.toText()} target="_blank">{shorten(offer.buyer.toText())}</a>}
+                                      {props.identity && props.identity.getPrincipal().toText() === offer.buyer.toText() ? <Button onClick={cancelOffer} size={"small"} style={{color:"white", backgroundColor:"#c32626"}} variant={"contained"}>Cancel</Button> : <a href={"https://ic.rocks/principal/"+offer.buyer.toText()} target="_blank" rel="noopener noreferrer">{shorten(offer.buyer.toText())}</a>}
                                     </TableCell>
                                   </TableRow>
                                 );
@@ -633,7 +603,7 @@ const Detail = (props) => {
                     </div>
                   :
                     <>
-                    {transactions.length == 0 ?                    
+                    {transactions.length === 0 ?                    
                       <div style={{textAlign:"center"}}>
                         <Typography
                           paragraph
@@ -663,8 +633,8 @@ const Detail = (props) => {
                                 <TableCell><ShoppingCartIcon style={{fontSize:18,verticalAlign:"middle"}} /> <strong>Sale</strong></TableCell>
                                 <TableCell align="right"><strong><PriceICP price={transaction.price} /></strong><br />
                                 {EntrepotGetICPUSD(transaction.price) ? <small><PriceUSD price={EntrepotGetICPUSD(transaction.price)} /></small> : ""}</TableCell>
-                                <TableCell align="center"><a href={"https://ic.rocks/principal/"+transaction.seller.toText()} target="_blank">{shorten(transaction.seller.toText())}</a></TableCell>
-                                <TableCell align="center"><a href={"https://dashboard.internetcomputer.org/account/"+transaction.buyer} target="_blank">{shorten(transaction.buyer)}</a></TableCell>
+                                <TableCell align="center"><a href={"https://ic.rocks/principal/"+transaction.seller.toText()} target="_blank" rel='noopener noreferrer'>{shorten(transaction.seller.toText())}</a></TableCell>
+                                <TableCell align="center"><a href={"https://dashboard.internetcomputer.org/account/"+transaction.buyer} target="_blank" rel='noopener noreferrer'>{shorten(transaction.buyer)}</a></TableCell>
                                 <TableCell align="center"><Timestamp
                                   relative
                                   autoUpdate
@@ -685,7 +655,7 @@ const Detail = (props) => {
           </Grid>
         </Grid>
       </Container>
-      <OfferForm floor={floor} address={props.account.address} balance={props.balance} complete={reloadOffers} floor={floor} identity={props.identity} alert={props.alert} open={openOfferForm} close={closeOfferForm} loader={props.loader} error={props.error} tokenid={tokenid} />
+      <OfferForm floor={floor} address={props.account.address} balance={props.balance} complete={reloadOffers} identity={props.identity} alert={props.alert} open={openOfferForm} close={closeOfferForm} loader={props.loader} error={props.error} tokenid={tokenid} />
     </>
   );
 };

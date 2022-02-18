@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import { EntrepotIsLiked, EntrepotLike, EntrepotUnike, EntrepotGetLikes, EntrepotUpdateLiked } from '../utils';
+import { EntrepotIsLiked, EntrepotLike, EntrepotUnike, EntrepotGetLikes, } from '../utils';
 function useInterval(callback, delay) {
   const savedCallback = React.useRef();
 
@@ -29,8 +27,8 @@ var skipRefresh = false;
 export default function Favourite(props) {
   const [liked, setLiked] = React.useState(EntrepotIsLiked(props.tokenid));
   const [count, setCount] = React.useState(false);
-  const fontSize = (props?.size == "large" ? 20 : 12);
-  const iconSize = (props?.size == "large" ? { width:24,height:24 } : { width:22,height:22});
+  const fontSize = (props?.size === "large" ? 20 : 12);
+  const iconSize = (props?.size === "large" ? { width:24,height:24 } : { width:22,height:22});
   const _refresh = async () => {
     if (skipRefresh) return;
     if (props.showcount) EntrepotGetLikes(props.tokenid).then(r => setCount(r));

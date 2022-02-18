@@ -1,5 +1,3 @@
-import React, { useEffect } from "react";
-
 export default function getGenes(genes) {
   var geneSegments = [
     decodeToSegment([genes[0], genes[1], genes[2]]),
@@ -69,5 +67,6 @@ const getGeneOptions = (options, s1, s2) => {
 };
 
 const decodeToSegment = x => {
-  return [(x[0] >> 2 & 63), (((x[0] & 3) << 4) + (x[1] >> 4 & 15)), (((x[1] & 15 ) << 2) + (x[2] >> 6 & 3)), (x[2] & 63)]
+  return [((x[0] >> 2) & 63), (((x[0] & 3) << 4) + ((x[1] >> 4) & 15)), (((x[1] & 15 ) << 2) + ((x[2] >> 6) & 3)), (x[2] & 63)]
+  // return [(x[0] >> 2 & 63), (((x[0] & 3) << 4) + (x[1] >> 4 & 15)), (((x[1] & 15 ) << 2) + (x[2] >> 6 & 3)), (x[2] & 63)]
 };

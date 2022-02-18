@@ -35,7 +35,7 @@ export default function CollectionDetails(props) {
   }, []);
   return (<>
     <div style={{borderRadius:5,marginBottom:70,background:(typeof collection.banner != 'undefined' && collection.banner ? "url('"+collection.banner+"') no-repeat center center" : "#aaa"), backgroundSize:"cover", height:200}}>
-      <Avatar style={{top:150,margin:"0 auto",border:"10px solid white",height:120, width:120}} src={(typeof collection.avatar != 'undefiend' && collection.avatar ? collection.avatar : "/collections/"+collection.canister+".jpg")} />
+      <Avatar style={{top:150,margin:"0 auto",border:"10px solid white",height:120, width:120}} src={(typeof collection.avatar != 'undefined' && collection.avatar ? collection.avatar : "/collections/"+collection.canister+".jpg")} />
     </div>
     <Grid className={classes.stats} container direction="row" alignItems="center" spacing={2}>
       <Grid item md={4} xs={12} style={{textAlign:"center"}}>
@@ -52,7 +52,7 @@ export default function CollectionDetails(props) {
             </Grid>
             <Grid item md={4}>
               <span style={{color:"#00d092"}}>Avg Price</span><br />
-              <strong>{stats.average == "-" ? "-" : <PriceICP size={20} volume={true} clean={true} price={stats.average} />}</strong>
+              <strong>{stats.average === "-" ? "-" : <PriceICP size={20} volume={true} clean={true} price={stats.average} />}</strong>
             </Grid>
           </Grid>}
         </>}
@@ -61,9 +61,9 @@ export default function CollectionDetails(props) {
       </Grid>
       <Grid item md={4} xs={12} style={{textAlign:"center"}}>
         <ul className={classes.socials}>
-          <li><a href={"https://ic.rocks/principal/"+collection.canister} target="_blank"><img alt="create" style={{ width: 32 }} src={"/icon/icrocks.png"} /></a></li>
+          <li><a href={"https://ic.rocks/principal/"+collection.canister} target="_blank" rel="noopener noreferrer"><img alt="create" style={{ width: 32 }} src={"/icon/icrocks.png"} /></a></li>
           {['telegram', 'twitter', 'medium', 'discord'].filter(a => collection.hasOwnProperty(a) && collection[a]).map(a => {
-            return (<li key={a}><a href={collection[a]} target="_blank"><img alt="create" style={{ width: 32 }} src={"/icon/"+a+".png"} /></a></li>);
+            return (<li key={a}><a href={collection[a]} target="_blank" rel='noopener noreferrer'><img alt="create" style={{ width: 32 }} src={"/icon/"+a+".png"} /></a></li>);
           })}
         </ul>
       </Grid>
