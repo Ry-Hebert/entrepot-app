@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -33,7 +33,7 @@ export default function Navbar(props) {
       <AppBar position="fixed" style={{zIndex: 1400, background: "white" }}>
         <Toolbar>
           <Typography variant="h6" noWrap>
-            <a onClick={() => goTo("/")}><img
+            <a href='/' onClick={() => goTo("/")}><img
               alt="Entrepot"
               src="/logo.jpg"
               style={{ height: 64, cursor: "pointer" }}

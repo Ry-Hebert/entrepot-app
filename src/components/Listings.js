@@ -6,36 +6,23 @@ import CachedIcon from '@material-ui/icons/Cached';
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Box from "@material-ui/core/Box";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import Drawer from '@material-ui/core/Drawer';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import List from '@material-ui/core/List';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Collapse from "@material-ui/core/Collapse";
 import Slider from "@material-ui/core/Slider";
-import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import Alert from '@material-ui/lab/Alert';
-import TableContainer from '@material-ui/core/TableContainer';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import ListIcon from '@material-ui/icons/List';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Checkbox from '@material-ui/core/Checkbox';
-import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import TableBody from '@material-ui/core/TableBody';
 import InputLabel from "@material-ui/core/InputLabel";
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -48,13 +35,11 @@ import extjs from "../ic/extjs.js";
 import getNri from "../ic/nftv.js";
 import { useTheme } from "@material-ui/core/styles";
 import NFT from "./NFT";
-import BuyForm from "./BuyForm";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 import collections from '../ic/collections.js';
 import ViewModuleIcon from '@material-ui/icons/ViewModule';
 import ViewComfyIcon from '@material-ui/icons/ViewComfy';
-import PriceICP from './PriceICP';
 import CollectionDetails from './CollectionDetails';
 import { EntrepotUpdateStats, EntrepotAllStats, EntrepotCollectionStats } from '../utils';
 const api = extjs.connect("https://boundary.ic0.app/");
@@ -86,19 +71,11 @@ const useDidMountEffect = (func, deps) => {
     useEffect(() => {
         if (didMount.current) func();
         else didMount.current = true;
-    }, deps);
+    }, [func ,deps]);
 }
 
-const _showListingPrice = (n) => {
-  n = Number(n) / 100000000;
-  return n.toFixed(8).replace(/0{1,6}$/, "");
-};
-
-const emptyListing = {
-  pricing: "",
-  img: "",
-};
 var _ss, canUpdateListings = true;
+
 export default function Listings(props) {
   const params = useParams();
   const classes = useStyles();
@@ -129,7 +106,6 @@ export default function Listings(props) {
   const [toggleFilter, setToggleFilter] = useState(true);
   const [openFilters, setOpenFilters] = useState([]);
   const [filterData, setFilterData] = useState(false);
-  const [collapseOpen, setCollapseOpen] = useState(false);
   const [gridSize, setGridSize] = React.useState(localStorage.getItem("_gridSize") ?? "small");
   const [wearableFilter, setWearableFilter] = useState("all");
   const [collection, setCollection] = useState(collections.find(e => e.route === params?.route));
@@ -149,7 +125,7 @@ export default function Listings(props) {
   };
 
   var filterHooks = [];
-  if (collection.route == 'cronics'){
+  if (collection.route === 'cronics'){
     filterHooks.push((results) => {
       return results.filter(result => {
         for(var i = 0; i < cronicFilterTraits.length; i++){        
@@ -163,11 +139,6 @@ export default function Listings(props) {
     });
   }
   
-  
-  const changeWearableFilter = async (event) => {
-    setPage(1);
-    setWearableFilter(event.target.value);
-  };
   const changeSort = (event) => {
     setPage(1);
     setSort(event.target.value);
@@ -184,7 +155,7 @@ export default function Listings(props) {
     return _a;
   };
 
-  
+
   const loadFilterData = async () => {
     if (collection?.filter){
       try{
@@ -202,30 +173,30 @@ export default function Listings(props) {
   };
   const handleToggleFilter = traitId => {
     if (isOpenFilter(traitId)) {
-      setOpenFilters(openFilters.filter(b => traitId != b));
+      setOpenFilters(openFilters.filter(b => traitId !== b));
     } else {
       setOpenFilters(openFilters.concat([traitId]));
     };
   };
   const filterGetCount = (traitId, traitValueId) => {
-    return filterData[1].filter(a => a[1].find(b => b[0] == traitId && b[1] == traitValueId)).length;
+    return filterData[1].filter(a => a[1].find(b => b[0] === traitId && b[1] === traitValueId)).length;
   };
   const isFilterValueSelected = (traitId, traitValueId) => {
-    return (selectedFilters.find(a => a[0] == traitId && a[1] == traitValueId) ? true : false);
+    return (selectedFilters.find(a => a[0] === traitId && a[1] === traitValueId) ? true : false);
   };
   const handleToggleFilterTrait = (traitId, traitValueId) => {
     if (isFilterValueSelected(traitId, traitValueId)) {
-      setSelectedFilters(selectedFilters.filter(b => !(b[0] == traitId && b[1] == traitValueId)));
+      setSelectedFilters(selectedFilters.filter(b => !(b[0] === traitId && b[1] === traitValueId)));
     } else {
       setSelectedFilters(selectedFilters.concat([[traitId, traitValueId]]));
     };
   };
   const showSelectedFilters = () => {
     if (!filterData) return [];
-    return selectedFilters.map(a => [filterData[0].find(b => a[0] == b[0]).map((c,i) => {
-      if (i == 0) return [""];
-      if (i == 1) return [c+":"];
-      else return [c.find(d => a[1] == d[0])[1]];
+    return selectedFilters.map(a => [filterData[0].find(b => a[0] === b[0]).map((c,i) => {
+      if (i === 0) return [""];
+      if (i === 1) return [c+":"];
+      else return [c.find(d => a[1] === d[0])[1]];
     }).join(''), a]);
   };
   const filterListings = (_listings, sf) => {
@@ -240,7 +211,7 @@ export default function Listings(props) {
     var ft = filterData[1].filter(a => {
       for(const b in alteredFilters){
         if(!alteredFilters.hasOwnProperty(b)) continue;
-        var fnd = a[1].find(c => c[0] == b);
+        var fnd = a[1].find(c => c[0] === b);
         if (fnd) {
           if (alteredFilters[b].indexOf(fnd[1]) < 0) return false;
         };
@@ -271,7 +242,7 @@ export default function Listings(props) {
     return a;
   };
   const _isCanister = c => {
-    return c.length == 27 && c.split("-").length == 5;
+    return c.length === 27 && c.split("-").length === 5;
   };
   
   const _updates = async (s, c) => {
@@ -316,10 +287,10 @@ export default function Listings(props) {
         switch(_showing){
           case "all":
             return true;
-            break;
           case "listed":
             return a[1];
-            break;
+          default:
+            return console.log("_displayListings Error")
         };
       });
       _displayListings = filterListings(_displayListings, _selectedFilters);
@@ -394,23 +365,23 @@ export default function Listings(props) {
       canUpdateListings = true;
     }
   };
-  const theme = useTheme();
-  const styles = {
-    empty: {
-      maxWidth: 1200,
-      margin: "0 auto",
-      textAlign: "center",
-    },
-    details: {
-      textAlign: "center",
-      paddingBottom:50,
-      marginBottom:50,
-    },
-    grid: {
-      flexGrow: 1,
-      padding: theme.spacing(2),
-    },
-  };
+  // const theme = useTheme();
+  // const styles = {
+  //   empty: {
+  //     maxWidth: 1200,
+  //     margin: "0 auto",
+  //     textAlign: "center",
+  //   },
+  //   details: {
+  //     textAlign: "center",
+  //     paddingBottom:50,
+  //     marginBottom:50,
+  //   },
+  //   grid: {
+  //     flexGrow: 1,
+  //     padding: theme.spacing(2),
+  //   },
+  // };
   const changeGrid = (e, a) => {
     localStorage.setItem("_gridSize", a);
     setGridSize(a)
@@ -547,7 +518,7 @@ export default function Listings(props) {
                         return (
                           <div key={a[0]+"_"+b[0]} style={{width:"100%"}}>
                             <FormControlLabel style={{maxWidth:"80%"}}
-                              control={<Checkbox checked={(selectedFilters.find(c => c[0] == a[0] && c[1] == b[0]) ? true : false)} onChange={() => {handleToggleFilterTrait(a[0], b[0])}}  />}
+                              control={<Checkbox checked={(selectedFilters.find(c => c[0] === a[0] && c[1] === b[0]) ? true : false)} onChange={() => {handleToggleFilterTrait(a[0], b[0])}}  />}
                               label={b[1]}
                             />
                             <Chip style={{float:"right"}} label={filterGetCount(a[0], b[0])} variant="outlined" />
@@ -561,7 +532,7 @@ export default function Listings(props) {
             
               {toggleFilter ?
               <>
-                {params?.route == "cronics" ? (
+                {params?.route === "cronics" ? (
                   <>
                   {cronicFilterTraits.map(filterName => {
                     return (

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import Grid from "@material-ui/core/Grid";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles((theme) => ({
@@ -71,7 +71,7 @@ export default function Flip(props) {
     props.flipSubscriber(props.id, () => {
       setFlipped(false);
     });
-  }, []);
+  });
   const flip = () => {
     if (!flipped) props.onFlip(props.id);
     setFlipped(a => !a);
@@ -81,10 +81,10 @@ export default function Flip(props) {
     <div className={classes.box + (flipped ? " flipped" : "")  + (props.small ? " small" : "") } onClick={flip}>
       <div className={classes.front}>
         <CircularProgress style={{margin:"40% auto 0",display:(imageLoaded ? "none" : "block")}} color="inherit" />
-        <img style={{display:(!imageLoaded ? "none" : "block")}} onLoad={() => setImageLoaded(true)}  src={"https://poyn6-dyaaa-aaaah-qcfzq-cai.raw.ic0.app/?asset="+props.card[0]+tmap[props.card[1]]+"&type=thumbnail"} />
+        <img style={{display:(!imageLoaded ? "none" : "block")}} onLoad={() => setImageLoaded(true)}  src={"https://poyn6-dyaaa-aaaah-qcfzq-cai.raw.ic0.app/?asset="+props.card[0]+tmap[props.card[1]]+"&type=thumbnail"} alt='' />
       </div>
       <div className={classes.back}>
-        <img src={"https://poyn6-dyaaa-aaaah-qcfzq-cai.raw.ic0.app/?asset="+props.card[0]+"B&type=thumbnail"} />
+        <img src={"https://poyn6-dyaaa-aaaah-qcfzq-cai.raw.ic0.app/?asset="+props.card[0]+"B&type=thumbnail"} alt='' />
       </div>
     </div>
     {props.showRarity && !flipped ? <p><strong>{tmap2[props.card[1]]}<br />{tmap3[props.card[1]]}</strong></p> : ""}

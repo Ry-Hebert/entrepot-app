@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import React from "react";
 import HoverVideoPlayer from 'react-hover-video-player';
 import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -13,9 +12,9 @@ export default function Opener(props) {
   const [playOpen, setPlayOpen] = React.useState(false);
   const [openerOpen, setOpenerOpen] = React.useState(false);
   const [openerCards, setOpenerCards] = React.useState([]);
-  const [toggleFlip, setToggleFlip] = React.useState(0);
+  // const [toggleFlip, setToggleFlip] = React.useState(0);
   const hoverVideoRef = React.useRef();
-  const rnum = (min, max) => Math.floor(Math.random() * (max - min +1)) + min;
+  // const rnum = (min, max) => Math.floor(Math.random() * (max - min +1)) + min;
   React.useEffect(() => {
     if (props.open) openPack();
   }, [props.open]);

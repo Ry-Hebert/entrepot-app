@@ -1,7 +1,5 @@
 import React from "react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import PropTypes from 'prop-types';
-import { styled, withStyles } from '@material-ui/styles';
+// import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Chip from "@material-ui/core/Chip";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
@@ -12,44 +10,25 @@ import Typography from "@material-ui/core/Typography";
 import MuiTooltip from "@material-ui/core/Tooltip";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import getGenes from "./CronicStats.js";
-import Skeleton from "@material-ui/lab/Skeleton";
 import Button from "@material-ui/core/Button";
-import Dialog from '@material-ui/core/Dialog';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
 import Timestamp from "react-timestamp";
 import extjs from "../ic/extjs.js";
 import { useNavigate } from "react-router-dom";
-import ArrowForwardIosSharpIcon from '@material-ui/icons/ArrowForwardIosSharp';
-import MuiAccordion from '@material-ui/core/Accordion';
-import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
-import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import MuiTableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper'
 import Favourite from './Favourite';
 import PriceICP from './PriceICP';
 import _c from '../ic/collections.js';
 import getNri from "../ic/nftv.js";
 import { makeStyles } from "@material-ui/core";
-import { EntrepotNFTImage, EntrepotNFTLink, EntrepotNFTMintNumber, EntrepotDisplayNFT, EntrepotGetICPUSD } from '../utils';
+import { EntrepotNFTImage, EntrepotNFTMintNumber, EntrepotDisplayNFT } from '../utils';
 var collections = _c;
 const api = extjs.connect("https://boundary.ic0.app/");
-const _showListingPrice = (n) => {
-  n = Number(n) / 100000000;
-  return n.toFixed(8).replace(/0{1,6}$/, "");
-};
+
+// const _showListingPrice = (n) => {
+//   n = Number(n) / 100000000;
+//   return n.toFixed(8).replace(/0{1,6}$/, "");
+// };
+
 function useInterval(callback, delay) {
   const savedCallback = React.useRef();
 
@@ -69,9 +48,11 @@ function useInterval(callback, delay) {
     }
   }, [delay]);
 }
-const _showDate = (t) => {
-  return new Date(Number(t/1000000n)).toLocaleDateString();
-};
+
+// const _showDate = (t) => {
+//   return new Date(Number(t/1000000n)).toLocaleDateString();
+// };
+
 const getCollection = c => {
   return collections.find(e => e.canister === c);
 };
@@ -108,7 +89,7 @@ export default function NFT(props) {
   const navigate = useNavigate();
   const getListing = () => {
     api.token(canister).listings().then(r => {
-      var f = r.find(a => a[0] == index);
+      var f = r.find(a => a[0] === index);
       if (f[1]) setListing(f[1]);
       else setListing(false);
     });
@@ -201,23 +182,23 @@ export default function NFT(props) {
   const getButtons = () => {
     var buttons = [];
     if(listing) {      
-      buttons.push([(currentBtn == 0 && currentBtnText ? buttonLoadingText : "Update"), () => props.listNft({id : tokenid, listing:listing}, buttonLoader, refresh)]);
+      buttons.push([(currentBtn === 0 && currentBtnText ? buttonLoadingText : "Update"), () => props.listNft({id : tokenid, listing:listing}, buttonLoader, refresh)]);
       buttons.push(["Transfer", () => props.transferNft({id : tokenid, listing:listing}, buttonLoader, refresh)]);
     } else {
       if (wrappedCanisters.concat(unwrappedCanisters).indexOf(canister) < 0) {
-        buttons.push([(currentBtn == 0 && currentBtnText ? buttonLoadingText : "Sell"), () => props.listNft({id : tokenid, listing:listing}, buttonLoader, refresh)]);
+        buttons.push([(currentBtn === 0 && currentBtnText ? buttonLoadingText : "Sell"), () => props.listNft({id : tokenid, listing:listing}, buttonLoader, refresh)]);
         buttons.push(["Transfer", () => props.transferNft({id : tokenid, listing:listing}, buttonLoader, refresh)]);
       } else {
         if (unwrappedCanisters.indexOf(canister) >= 0) {
-          buttons.push([(currentBtn == 0 && currentBtnText ? buttonLoadingText : "Sell"), () => props.wrapAndlistNft({id : tokenid, listing:listing}, buttonLoader, refresh)]);
+          buttons.push([(currentBtn === 0 && currentBtnText ? buttonLoadingText : "Sell"), () => props.wrapAndlistNft({id : tokenid, listing:listing}, buttonLoader, refresh)]);
           buttons.push(["Transfer", () => props.transferNft({id : tokenid, listing:listing}, buttonLoader, refresh)]);
         } else {
-          buttons.push([(currentBtn == 0 && currentBtnText ? buttonLoadingText : "Sell"), () => props.listNft({id : tokenid, listing:listing}, buttonLoader, refresh)]);
+          buttons.push([(currentBtn === 0 && currentBtnText ? buttonLoadingText : "Sell"), () => props.listNft({id : tokenid, listing:listing}, buttonLoader, refresh)]);
           buttons.push(["Transfer", () => props.transferNft({id : tokenid, listing:listing}, buttonLoader, refresh)]);
           buttons.push(["Unwrap", () => props.unwrapNft({id : tokenid, listing:listing}, buttonLoader, refresh)]);
         };
       }
-      if (canister == 'poyn6-dyaaa-aaaah-qcfzq-cai' && index >= 25000) {
+      if (canister === 'poyn6-dyaaa-aaaah-qcfzq-cai' && index >= 25000) {
         buttons.push(["Open", () => props.unpackNft({id : tokenid, listing:listing}, buttonLoader, refresh)]);
       };
     }
@@ -229,28 +210,30 @@ export default function NFT(props) {
   const nftImg = () => {
     return EntrepotNFTImage(canister, index, tokenid);
   };
-  const nftLink = () => {
-    return EntrepotNFTLink(canister, index, tokenid);
-  };
   
-  const nriLink = () => {
-    if (canister === "bxdf4-baaaa-aaaah-qaruq-cai") return "https://nntkg-vqaaa-aaaad-qamfa-cai.ic.fleek.co/?collection=punks&tokenid=" + index;
-    if (canister === "3db6u-aiaaa-aaaah-qbjbq-cai") return "https://nntkg-vqaaa-aaaad-qamfa-cai.ic.fleek.co/?collection=drips&tokenid=" + index;
-    if (canister === "q6hjz-kyaaa-aaaah-qcama-cai") return "https://nntkg-vqaaa-aaaad-qamfa-cai.ic.fleek.co/?collection=bunnies&tokenid=" + index;
-    return "https://nntkg-vqaaa-aaaad-qamfa-cai.ic.fleek.co/?tokenid=" + tokenid;
-  };
+  // const nftLink = () => {
+  //   return EntrepotNFTLink(canister, index, tokenid);
+  // };
+  
+  // const nriLink = () => {
+  //   if (canister === "bxdf4-baaaa-aaaah-qaruq-cai") return "https://nntkg-vqaaa-aaaad-qamfa-cai.ic.fleek.co/?collection=punks&tokenid=" + index;
+  //   if (canister === "3db6u-aiaaa-aaaah-qbjbq-cai") return "https://nntkg-vqaaa-aaaad-qamfa-cai.ic.fleek.co/?collection=drips&tokenid=" + index;
+  //   if (canister === "q6hjz-kyaaa-aaaah-qcama-cai") return "https://nntkg-vqaaa-aaaad-qamfa-cai.ic.fleek.co/?collection=bunnies&tokenid=" + index;
+  //   return "https://nntkg-vqaaa-aaaad-qamfa-cai.ic.fleek.co/?tokenid=" + tokenid;
+  // };
+
   const wrappedCanisters = ["jeghr-iaaaa-aaaah-qco7q-cai","y3b7h-siaaa-aaaah-qcnwa-cai","q6hjz-kyaaa-aaaah-qcama-cai", "3db6u-aiaaa-aaaah-qbjbq-cai", "bxdf4-baaaa-aaaah-qaruq-cai"];
   const unwrappedCanisters = ["fl5nr-xiaaa-aaaai-qbjmq-cai","4nvhy-3qaaa-aaaah-qcnoq-cai","xkbqi-2qaaa-aaaah-qbpqq-cai", "qcg3w-tyaaa-aaaah-qakea-cai", "d3ttm-qaaaa-aaaai-qam4a-cai"];
-  const showWrapped = () => {
-    if (wrappedCanisters.indexOf(canister) >= 0)
-      return (<span style={{fontSize:".9em",position:"absolute",top: 0,left: 0,fontWeight: "bold",color: "black",backgroundColor: "#00b894",padding: "2px"}}>WRAPPED</span>);
-    else return "";
-  };
+  // const showWrapped = () => {
+  //   if (wrappedCanisters.indexOf(canister) >= 0)
+  //     return (<span style={{fontSize:".9em",position:"absolute",top: 0,left: 0,fontWeight: "bold",color: "black",backgroundColor: "#00b894",padding: "2px"}}>WRAPPED</span>);
+  //   else return "";
+  // };
   var t = ["Common","Uncommon","Rare","Epic","Legendary","Mythic"];
   const showNri = () => {
     if (typeof nri == 'undefined') return "";
     if (nri === false) return "";
-    if (canister == "poyn6-dyaaa-aaaah-qcfzq-cai") {
+    if (canister === "poyn6-dyaaa-aaaah-qcfzq-cai") {
       if (!metadata) return "";
       return (metadata.nonfungible.metadata[0][0] === 0 ? "Pack" : "#" + metadata.nonfungible.metadata[0][0] + " - " + t[metadata.nonfungible.metadata[0][1]]);
     };
@@ -264,7 +247,6 @@ export default function NFT(props) {
   };
 
   const handleClick = () => {
-    const id = index;
     navigate(`/marketplace/asset/${tokenid}`);
   };
   return (
@@ -395,7 +377,7 @@ export default function NFT(props) {
               {getButtons().length > 0 ?
                 <>
                   <Grid item lg={6} md={6}><Button onMouseDown={(e) => e.stopPropagation()} onClick={(e) => {e.stopPropagation(); buttonPush(0)}} size={"small"} fullWidth variant="contained" color="primary" style={{backgroundColor:"#003240", color:"white"}}>{getButtons()[0][0]}</Button></Grid>
-                  {getButtons().length == 2 ?
+                  {getButtons().length === 2 ?
                     <Grid item lg={6} md={6}><Button onMouseDown={(e) => e.stopPropagation()} onClick={(e) => {e.stopPropagation(); buttonPush(1)}} size={"small"} fullWidth variant="contained" color="primary" style={{backgroundColor:"#003240", color:"white"}}>{getButtons()[1][0]}</Button></Grid>
                   :
                   <Grid item lg={6} md={6}>

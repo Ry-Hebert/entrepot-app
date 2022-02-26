@@ -14,7 +14,7 @@ export default function ListingForm(props) {
   const [price, setPrice] = React.useState(props.nft.listing?.price ? Number(props.nft.listing.price)/100000000 : 0);
   var collection;
   if (props.nft.id){
-    const { index, canister} = extjs.decodeTokenId(props.nft.id);
+    const canister = extjs.decodeTokenId(props.nft.id);
     collection = props.collections.find(e => e.canister === canister);
   }
   const error = (e) => {
