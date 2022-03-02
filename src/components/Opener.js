@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import HoverVideoPlayer from 'react-hover-video-player';
 import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -15,25 +15,17 @@ export default function Opener(props) {
   // const [toggleFlip, setToggleFlip] = React.useState(0);
   const hoverVideoRef = React.useRef();
   // const rnum = (min, max) => Math.floor(Math.random() * (max - min +1)) + min;
-  React.useEffect(() => {
-    if (props.open) openPack();
-  }, [props.open]);
-  React.useEffect(() => {
-    if (playOpen){      
-      const videoElement = hoverVideoRef.current;
-      videoElement.onended = showPack;
-    };
-  }, [playOpen]);
+
   const onFlip = async a => {
     for(var i = 0; i < subs.length; i++){
-      if (i == a) continue;
+      if (i === a) continue;
       subs[i]();
     };
   };
   const flipSubscriber = async (i, a) => {
     subs[i] = a;
   };
-  const openPack = async () => {
+  const openPack = useCallback( async () => {
     setPlayOpen(true);
     setOpenerOpen(true);
     //hot api, will sign as identity - BE CAREFUL
@@ -49,15 +41,29 @@ export default function Opener(props) {
       console.log(e)
       props.alert("Error", "Sorry, something went wrong!");
     };
-  };
+  }, [props]);
+
+  React.useEffect(() => {
+    if (props.open) openPack();
+  }, [props.open, openPack]);
+
   const closePack = () => {
     setOpenerCards([]);
     setOpenerOpen(false);
   };
-  const showPack = () => {
+
+  const showPack = useCallback( () => {
     props.onEnd();
     setPlayOpen(false);
-  };
+  }, [props]);
+
+  React.useEffect(() => {
+    if (playOpen){      
+      const videoElement = hoverVideoRef.current;
+      videoElement.onended = showPack;
+    };
+  }, [playOpen, showPack]);
+
   return (<>
     {playOpen ? 
     <>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -63,7 +63,7 @@ export default function SaleListing(props) {
     return true;
   };
 
-  const _ah = handleToAsset.find(a => a[0] == props.asset);
+  const _ah = handleToAsset.find(a => a[0] === props.asset);
   const buy = async () => {
     return props.buy(props.asset);
   };

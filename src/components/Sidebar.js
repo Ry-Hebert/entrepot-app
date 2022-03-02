@@ -18,7 +18,6 @@ import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import CachedIcon from '@material-ui/icons/Cached';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import SnackbarButton from '../components/SnackbarButton';
 import Blockie from '../components/Blockie';
@@ -64,7 +63,7 @@ const _showListingPrice = n => {
   n = Number(n) / 100000000;
   return n.toFixed(8).replace(/0{1,6}$/, '');
 };
-var intv = false;
+
 var loadedAccount = false;
 export default function Wallet(props) {
   const navigate = useNavigate();
@@ -93,11 +92,11 @@ export default function Wallet(props) {
    props.login(t); 
    setAnchorElLogin(null)
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
   const _isCanister = c => {
-    return c.length == 27 && c.split("-").length == 5;
+    return c.length === 27 && c.split("-").length === 5;
   };
   const refresh = async () => {
     if (props.account){
@@ -139,13 +138,13 @@ export default function Wallet(props) {
             count : tokens.length
           });
           if (firstrun) {
-            if (thisacc == loadedAccount) setMyCollections(mcs);
+            if (thisacc === loadedAccount) setMyCollections(mcs);
             else setMyCollections(false);
           }
         }
         
       };
-      if (thisacc == loadedAccount) setMyCollections(mcs);
+      if (thisacc === loadedAccount) setMyCollections(mcs);
       else setMyCollections(false);
     }
   };
@@ -161,7 +160,7 @@ export default function Wallet(props) {
   }, [props.account]);
   React.useEffect(() => {
     props.setBalance(balance);
-  }, [balance]);
+  }, [balance, props]);
   React.useEffect(() => {
     loadedAccount = props.currentAccount;
   }, [props.currentAccount]);
@@ -218,7 +217,7 @@ export default function Wallet(props) {
             onClose={() => setAnchorElLogin(null)}
           >
             {props.accounts.map((account, i) => {
-            if (account.address == props.account.address) return [];
+            if (account.address === props.account.address) return [];
             return (<MenuItem key={i} onClick ={()=> selectAccount(i)}>
              <Avatar style={{width:20, height: 20, marginRight:5}}><Blockie address={account.address} /></Avatar> <ListItemText primary={account.name} />
             </MenuItem>)
@@ -286,7 +285,7 @@ export default function Wallet(props) {
           :
             <>
               {myCollections.map(_collection => {
-                return (<ListItem key={_collection.canister + "-" + _collection.count} selected={props.view === "wallet" && _collection.route == props.collection?.route} button onClick={() => navigate("/wallet/"+_collection.route)}>
+                return (<ListItem key={_collection.canister + "-" + _collection.count} selected={props.view === "wallet" && _collection.route === props.collection?.route} button onClick={() => navigate("/wallet/"+_collection.route)}>
                   <ListItemAvatar>
                     <Avatar>
                       <img alt={_collection.name} src={"/collections/"+_collection.canister+".jpg"} style={{height:64}} />
@@ -303,7 +302,7 @@ export default function Wallet(props) {
       </List> </>: ""}
       
       <div style={{width: drawerWidth-1, zIndex: 10, height: 60, backgroundColor:'white', position:"fixed", bottom:0, textAlign:'center'}} >
-        <span style={{position:'absolute', bottom:'10px', left:'0', right:'0'}}>Developed by ToniqLabs<br /><a href="https://docs.google.com/document/d/13aj8of_UXdByGoFdMEbbIyltXMn0TXHiUie2jO-qnNk/edit" target="_blank">Terms of Service</a></span>
+        <span style={{position:'absolute', bottom:'10px', left:'0', right:'0'}}>Developed by ToniqLabs<br /><a href="https://docs.google.com/document/d/13aj8of_UXdByGoFdMEbbIyltXMn0TXHiUie2jO-qnNk/edit" target="_blank" rel='noopener noreferrer'>Terms of Service</a></span>
       </div>
     </div>
   );

@@ -9,6 +9,6 @@ const numberWithCommas = (x) => {
 }
 export default function PriceICP(props) {
   var p = (props.clean ? numberWithCommas(props.price) : numberWithCommas(_showListingPrice(props.price)));
-  var p = (props.volume ? (Number(p.replace(",","")) >= 10000 ? (Number(p.replace(",",""))/1000).toFixed(1)+"k" : p ) : p);
-  return (<><img style={{verticalAlign : "top"}} src={"/currencies/icp.png"} height={(props.size ?? 18)} width={props.size ?? 18}/> {p}</>);
+  p = (props.volume ? (Number(p.replace(",","")) >= 10000 ? (Number(p.replace(",",""))/1000).toFixed(1)+"k" : p ) : p);
+  return (<><img style={{verticalAlign : "top"}} src={"/currencies/icp.png"} height={(props.size ?? 18)} width={props.size ?? 18} alt=''/> {p}</>);
 };

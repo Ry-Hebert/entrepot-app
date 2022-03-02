@@ -1,32 +1,23 @@
 import React from 'react';
-import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import Grid from "@material-ui/core/Grid";
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import CircularProgress from "@material-ui/core/CircularProgress";
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import CallReceivedIcon from '@material-ui/icons/CallReceived';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Avatar from '@material-ui/core/Avatar';
-import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import CachedIcon from '@material-ui/icons/Cached';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import SnackbarButton from '../components/SnackbarButton';
 import Blockie from '../components/Blockie';
 import LockIcon from '@material-ui/icons/Lock';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import PriceICP from '../components/PriceICP';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
@@ -72,17 +63,17 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 1
   }
 }));
-const _showListingPrice = n => {
-  n = Number(n) / 100000000;
-  return n.toFixed(8).replace(/0{1,6}$/, '');
-};
-var intv = false;
+// const _showListingPrice = n => {
+//   n = Number(n) / 100000000;
+//   return n.toFixed(8).replace(/0{1,6}$/, '');
+// };
+// var intv = false;
 var loadedAccount = false;
 export default function Wallet(props) {
   const navigate = useNavigate();
   const { window } = props;
   const classes = useStyles();
-  const theme = useTheme();
+  // const theme = useTheme();
   const container = window !== undefined ? () => window().document.body : undefined;
   const [balance, setBalance] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -115,7 +106,7 @@ export default function Wallet(props) {
   const refresh = async () => {
     if (props.account){
       var b = await api.token().getBalance(props.account.address);
-      var thisacc = loadedAccount;
+      // var thisacc = loadedAccount;
       setBalance(b);
       setLoading(false);
     }
@@ -130,7 +121,7 @@ export default function Wallet(props) {
     refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.account]);
-  React.useEffect(() => {
+  React.useEffect((props) => {
     props.setBalance(balance);
   }, [balance]);
   React.useEffect(() => {
@@ -213,7 +204,7 @@ export default function Wallet(props) {
             onClose={() => setAnchorElAccounts(null)}
           >
             {props.accounts.map((account, i) => {
-            if (account.address == props.account.address) return [];
+            if (account.address === props.account.address) return [];
             return (<MenuItem key={i} onClick ={()=> selectAccount(i)}>
              <Avatar style={{width:20, height: 20, marginRight:5}}><Blockie address={account.address} /></Avatar> <ListItemText primary={account.name} />
             </MenuItem>)
