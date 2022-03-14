@@ -1,19 +1,10 @@
-/* global BigInt */
-import React, { useEffect } from "react";
+import React from "react";
 import extjs from "../../ic/extjs.js";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import SaleListing from "../SaleListing";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Timestamp from "react-timestamp";
-import Pagination from "@material-ui/lab/Pagination";
-import { StoicIdentity } from "ic-stoic-identity";
-import Sidebar from "../Sidebar";
-import { useParams } from "react-router";
-import Navbar from "../../containers/Navbar.js";
 const api = extjs.connect("https://boundary.ic0.app/");
-const perPage = 60;
 function useInterval(callback, delay) {
   const savedCallback = React.useRef();
   // Remember the latest callback.
@@ -44,7 +35,7 @@ const _getRandomBytes = () => {
   return bs;
 };
 export default function BTCFlower(props) {
-  const [page, setPage] = React.useState(1);
+  // const [page, setPage] = React.useState(1);
   const [price, setPrice] = React.useState(500000000n);
   const [remaining, setRemaining] = React.useState(false);
   const [startTime, setStartTime] = React.useState(1642906800000);
@@ -52,13 +43,13 @@ export default function BTCFlower(props) {
   var whitelistend = 1642950000000;
   var presaleprice = 300000000n;
   var totalToSell = 1990;
-  var saleOver = false;  
-  const params = useParams();
+  var saleOver = false;
+  // const params = useParams();
   
   const _updates = async () => {
     try{
       var stats = await api.canister("pk6rk-6aaaa-aaaae-qaazq-cai", "sale").salesStats((props.account ? props.account.address : ""));
-      if (stats[1] == presaleprice) {
+      if (stats[1] === presaleprice) {
         setWhitelist(true);
       } else {
         setWhitelist(false);

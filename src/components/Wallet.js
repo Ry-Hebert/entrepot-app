@@ -121,9 +121,9 @@ export default function Wallet(props) {
     refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.account]);
-  React.useEffect((props) => {
+  React.useEffect(() => {
     props.setBalance(balance);
-  }, [balance]);
+  }, [balance, props]);
   React.useEffect(() => {
     loadedAccount = props.currentAccount;
   }, [props.currentAccount]);
